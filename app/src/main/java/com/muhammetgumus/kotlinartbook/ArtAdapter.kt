@@ -1,6 +1,7 @@
 package com.muhammetgumus.kotlinartbook
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
@@ -12,6 +13,7 @@ class ArtAdapter(val artList: ArrayList<Art>) : RecyclerView.Adapter<ArtAdapter.
 
     // ArtHolder sınıfınız zaten doğruydu, bir değişiklik gerekmedi.
     class ArtHolder(val binding: RecyclerRowBinding) : RecyclerView.ViewHolder(binding.root) {
+
     }
 
 
@@ -22,11 +24,23 @@ class ArtAdapter(val artList: ArrayList<Art>) : RecyclerView.Adapter<ArtAdapter.
         return ArtHolder(binding)
     }
 
+
+
+
+
     // 3. onBindViewHolder: Her bir satırın içeriğini doldurur.
     override fun onBindViewHolder(holder: ArtHolder, position: Int) {
         // artList'teki ilgili 'Art' nesnesinin 'artname' özelliğini TextView'e yazar.
         // XML dosyanızdaki TextView'in ID'si 'recycler_row_textview' olmalı.
-        holder.binding.recyclerViewtext.text = artList.get(position).name
+        holder.binding.recyclerRowTextview.text = artList.get(position).name
+
+
+        val byteArray = artList.get(position).image
+        val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        holder.binding.recyclerRowImageview.setImageBitmap(bitmap)
+
+
+
 
         // Satıra tıklandığında ne olacağını belirler.
         holder.itemView.setOnClickListener {
@@ -37,6 +51,8 @@ class ArtAdapter(val artList: ArrayList<Art>) : RecyclerView.Adapter<ArtAdapter.
             holder.itemView.context.startActivity(intent)
         }
     }
+
+
 
     // 4. getItemCount: Listenin toplam eleman sayısını döndürür.
     override fun getItemCount(): Int {

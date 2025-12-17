@@ -23,6 +23,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.muhammetgumus.kotlinartbook.databinding.ActivityArt2Binding
 import java.io.IOException
 
+
+
+
    class ArtActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityArt2Binding
@@ -78,15 +81,7 @@ import java.io.IOException
            }
 
            cursor.close()
-
-
-
-
-
-
-
-
-           }
+      }
 
 
 
@@ -108,7 +103,7 @@ import java.io.IOException
         val artistName = binding.ArtistNameText.text.toString()
        val year = binding.YearNameText.text.toString()
 
-          if (selectedBitmap != null) {
+          if (selectedBitmap != null && artName.isNotBlank() && artistName.isNotBlank() && year.isNotBlank() ) {
 
           val smallBitmap = makeSmallerBitmap(selectedBitmap!!,300)
 
@@ -144,7 +139,11 @@ import java.io.IOException
                startActivity(intent)
 
         }
+         else {
 
+             Toast.makeText(this,"Lütfen Boşlukları doldurun",Toast.LENGTH_LONG).show()
+
+         }
 
 
     }

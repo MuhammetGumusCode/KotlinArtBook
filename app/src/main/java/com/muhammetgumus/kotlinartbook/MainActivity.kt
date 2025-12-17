@@ -60,13 +60,15 @@ class MainActivity : AppCompatActivity() {
             val cursor = database.rawQuery("SELECT * FROM arts", null)
             val artNameIx = cursor.getColumnIndex("artname")
             val idIx = cursor.getColumnIndex("id")
+            val imageIx = cursor.getColumnIndex("image")
 
 
 
             while (cursor.moveToNext()) {
                 val name = cursor.getString(artNameIx)
                 val id = cursor.getInt(idIx)
-                val art = Art(name, id)
+                val image = cursor.getBlob(imageIx)
+                val art = Art(name, id, image)
                 artlist.add(art)
             }
 
