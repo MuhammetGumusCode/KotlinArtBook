@@ -33,6 +33,7 @@ class ArtAdapter(val artList: ArrayList<Art>) : RecyclerView.Adapter<ArtAdapter.
             // Tıklanan satırın verisiyle birlikte ArtActivity2'yi açar.
             val intent = Intent(holder.itemView.context, ArtActivity2::class.java)
                  intent.putExtra ("info","old")
+                 intent.putExtra("id",artList.get(position).id)
             holder.itemView.context.startActivity(intent)
         }
     }

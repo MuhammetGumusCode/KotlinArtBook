@@ -4,6 +4,7 @@ import android.Manifest // DOĞRU MANIFEST IMPORT EDİLDİ
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
@@ -15,32 +16,77 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayOutputStream
-
+import android.graphics.BitmapFactory
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.muhammetgumus.kotlinartbook.databinding.ActivityArt2Binding
 import java.io.IOException
 
-class ArtActivity2 : AppCompatActivity() {
+   class ArtActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityArt2Binding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     var selectedBitmap: Bitmap? = null
+    private lateinit var database: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityArt2Binding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        database = this.openOrCreateDatabase("Arts", Context.MODE_PRIVATE, null)
         registerLauncher()
 
 
 
+            val intent = intent
+           val info = intent.getStringExtra("info")
+           if (info.equals("new")) {
+
+          binding.ArtNameText.setText("")
+          binding.ArtistNameText.setText("")
+          binding.YearNameText.setText("")
+          binding.SaveButton.visibility = View.VISIBLE
+          binding.imageView.setImageResource(R.drawable.select)
+
+           }
+           else {
+
+             binding.SaveButton.visibility = View.INVISIBLE
+
+           val selectedid = intent.getIntExtra("id",1)
+           val cursor = database.rawQuery("SELECT * FROM arts WHERE id = ?", arrayOf(selectedid.toString()))
+
+           val artNameIx = cursor.getColumnIndex("artname")
+           val artistNameIx = cursor.getColumnIndex("artistname")
+           val yearIx = cursor.getColumnIndex("year")
+           val imageIx = cursor.getColumnIndex("image")
 
 
+           while (cursor.moveToNext()) {
+               binding.ArtNameText.setText(cursor.getString(artNameIx))
+               binding.ArtistNameText.setText(cursor.getString(artistNameIx))
+               binding.YearNameText.setText(cursor.getString(yearIx))
+
+               val byteArray = cursor.getBlob(imageIx)
+               val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+               binding.imageView.setImageBitmap(bitmap)
+
+
+           }
+
+           cursor.close()
+
+
+
+
+
+
+
+
+           }
 
 
 
@@ -62,7 +108,7 @@ class ArtActivity2 : AppCompatActivity() {
         val artistName = binding.ArtistNameText.text.toString()
        val year = binding.YearNameText.text.toString()
 
-        if (selectedBitmap != null) {
+          if (selectedBitmap != null) {
 
           val smallBitmap = makeSmallerBitmap(selectedBitmap!!,300)
 
@@ -73,7 +119,7 @@ class ArtActivity2 : AppCompatActivity() {
 
             binding.imageView.setImageBitmap(smallBitmap)
             try {
-               val database =this.openOrCreateDatabase("Arts",MODE_PRIVATE,null)
+             //  val database =this.openOrCreateDatabase("Arts",MODE_PRIVATE,null)
                 database.execSQL ("CREATE TABLE IF NOT EXISTS arts (id INTEGER PRIMARY KEY AUTOINCREMENT,artname VARCHAR,artistname VARCHAR,year VARCHAR,image BLOB)")
 
 
@@ -202,6 +248,15 @@ class ArtActivity2 : AppCompatActivity() {
                 Toast.makeText(this@ArtActivity2, "Permission needed!", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Activity yok edilirken veritabanını KAPAT
+        database.close()
     }
 
 

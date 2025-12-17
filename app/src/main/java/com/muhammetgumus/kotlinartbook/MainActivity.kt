@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
              artlist = ArrayList<Art>()
              artAdapter = ArtAdapter (artlist)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-             binding.recyclerView.adapter = artAdapter
+        binding.recyclerView.adapter = artAdapter
 
     }
 
@@ -60,6 +60,8 @@ class MainActivity : AppCompatActivity() {
             val cursor = database.rawQuery("SELECT * FROM arts", null)
             val artNameIx = cursor.getColumnIndex("artname")
             val idIx = cursor.getColumnIndex("id")
+
+
 
             while (cursor.moveToNext()) {
                 val name = cursor.getString(artNameIx)
