@@ -33,8 +33,6 @@ ActivityResultLauncher: Galeriye erişim ve fotoğraf seçme işlemleri için.
 
 Permissions: Android 13+ (Tiramisu) ve eski sürümler için dinamik izin yönetimi.
 
-📸 Ekran Görüntüleri
-(Buraya uygulamanın ekran görüntülerini ekleyebilirsin: app/src/main/res/drawable/ klasöründeki görsellerden faydalanabilirsin)
 
 📦 Kurulum
 Bu repoyu bilgisayarınıza klonlayın:
@@ -47,5 +45,7 @@ Gerekli bağımlılıkların yüklenmesi için projenin senkronize edilmesini be
 
 Bir emülatör veya gerçek bir cihaz üzerinde uygulamayı çalıştırın.
 
+
 Geliştirici Notu
+
 Bu proje, Android uygulama geliştirme sürecinde veritabanı işlemleri, adapter yapısı ve kullanıcı izinleri gibi temel konuları pekiştirmek amacıyla geliştirilmiştir.
